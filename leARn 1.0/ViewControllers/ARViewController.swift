@@ -64,7 +64,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         
         self.view.addSubview(self.textView)
         self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|[v]|", options: [], metrics: nil, views: ["v": self.sceneView]))
-        self.view.addConstraint(.init(item: self, attribute: .centerY, relatedBy: .equal, toItem: self.textView, attribute: .centerY, multiplier: 1, constant: 0))
+        self.view.addConstraint(.init(item: self.view, attribute: .centerY, relatedBy: .equal, toItem: self.textView, attribute: .centerY, multiplier: 1, constant: 0))
         
         self.sceneView.scene = SCNScene()
     }
