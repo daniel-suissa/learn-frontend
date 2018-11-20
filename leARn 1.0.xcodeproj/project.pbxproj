@@ -15,6 +15,7 @@
 		43EC30E32172C2B80073567C /* leARn_1_0Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EC30E22172C2B80073567C /* leARn_1_0Tests.swift */; };
 		43EC30EE2172C2B80073567C /* leARn_1_0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EC30ED2172C2B80073567C /* leARn_1_0UITests.swift */; };
 		500910942198BF02002BF5A2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500910932198BF02002BF5A2 /* LoginViewController.swift */; };
+		505D9CFE21A4643E0099009A /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9CFD21A4643E0099009A /* RegisterViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		43EC30ED2172C2B80073567C /* leARn_1_0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = leARn_1_0UITests.swift; sourceTree = "<group>"; };
 		43EC30EF2172C2B80073567C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		500910932198BF02002BF5A2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		505D9CFD21A4643E0099009A /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 			children = (
 				43EC30CF2172C2B40073567C /* ARViewController.swift */,
 				500910932198BF02002BF5A2 /* LoginViewController.swift */,
+				505D9CFD21A4643E0099009A /* RegisterViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -212,6 +215,14 @@
 				TargetAttributes = {
 					43EC30C72172C2B40073567C = {
 						CreatedOnToolsVersion = 9.4.1;
+						SystemCapabilities = {
+							com.apple.DataProtection = {
+								enabled = 0;
+							};
+							com.apple.Keychain = {
+								enabled = 0;
+							};
+						};
 					};
 					43EC30DD2172C2B80073567C = {
 						CreatedOnToolsVersion = 9.4.1;
@@ -278,6 +289,7 @@
 				500910942198BF02002BF5A2 /* LoginViewController.swift in Sources */,
 				43EC30D02172C2B40073567C /* ARViewController.swift in Sources */,
 				43EC30CC2172C2B40073567C /* AppDelegate.swift in Sources */,
+				505D9CFE21A4643E0099009A /* RegisterViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,7 +461,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.danielsuissa.leARn-1-0";
+				PRODUCT_BUNDLE_IDENTIFIER = com.danielsuissa.learn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -467,7 +479,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.danielsuissa.leARn-1-0";
+				PRODUCT_BUNDLE_IDENTIFIER = com.danielsuissa.learn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
