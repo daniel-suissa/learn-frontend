@@ -13,7 +13,7 @@ import ARKit
 class ARViewController: UIViewController, ARSCNViewDelegate {
     lazy var sceneView: ARSCNView = {
         let sceneView = ARSCNView(frame: .zero)
-        sceneView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        sceneView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         sceneView.showsStatistics = true
         return sceneView
     }()
@@ -52,6 +52,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         return textView
     }()
     var labelingTouch = false;
+    var lastTouchTime = Date()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,12 +60,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         self.sceneView.delegate = self
         
         self.view.addSubview(self.sceneView)
+        self.sceneView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|[v]|", options: [], metrics: nil, views: ["v": self.sceneView]))
         self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v]|", options: [], metrics: nil, views: ["v": self.sceneView]))
-        
+//
         self.view.addSubview(self.textView)
-        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|[v]|", options: [], metrics: nil, views: ["v": self.sceneView]))
+        self.textView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|[v]|", options: [], metrics: nil, views: ["v": self.textView]))
         self.view.addConstraint(.init(item: self.view, attribute: .centerY, relatedBy: .equal, toItem: self.textView, attribute: .centerY, multiplier: 1, constant: 0))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v(>=30)]", options: [], metrics: nil, views: ["v": self.textView]))
         
         self.sceneView.scene = SCNScene()
     }
@@ -91,24 +95,28 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
+        guard let touch = touches.first, lastTouchTime.timeIntervalSinceNow < -0.5 else { return }
+        self.lastTouchTime = Date()
         let result = sceneView.hitTest(touch.location(in: sceneView), types: [.featurePoint]);
         guard let hitResult = result.last else { return }
+        print("touch detected", self.lastTouchTime.timeIntervalSinceNow)
         
         let hitTransform = SCNMatrix4(hitResult.worldTransform);
         let hitVector = SCNVector3Make(hitTransform.m41, hitTransform.m42, hitTransform.m43)
         
         if labelingTouch {
             self.textView.isHidden = false
+            self.textView.becomeFirstResponder()
         } else {
             self.textView.isHidden = true
             createLabel(position: hitVector, hitTransform: hitTransform)
+            self.textView.resignFirstResponder()
         }
-        labelingTouch = !labelingTouch;
+        labelingTouch.toggle()
     }
     
     func createLabel(position: SCNVector3, hitTransform: SCNMatrix4) {
-        let text = textView.text;
+        guard let text = textView.text, !text.isEmpty else { return }
         let labelShape = SCNText(string: text, extrusionDepth: 0.1)
         
         labelShape.font = .systemFont(ofSize: 0.1)
