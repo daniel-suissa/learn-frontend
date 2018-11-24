@@ -11,39 +11,28 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class arItem {
-    var id: Int = 0
-    var label: String
-    var imageUrl: String
-    
-    required init(json: [String: Any]) {
-        self.id = json["id"] as! Int
-        self.label = json["label"] as! String
-        self.imageUrl = json["imageUrl"] as! String
-    }
-    
-}
 
 class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableViewDataSource {
-    private var data: [String] = []
+    private var data: [Item] = []
     lazy var tableView = { () -> UITableView in
         let tableView = UITableView(frame: self.view.bounds, style: UITableViewStyle.plain)
         tableView.backgroundColor = UIColor.white
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "my")
+        tableView.register(ItemCell.self, forCellReuseIdentifier: "my")
         self.view.addSubview(tableView)
         return tableView
     }
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
+        return self.data.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "my", for: indexPath)
-        let text = self.data[indexPath.row]
         
-        cell.textLabel?.text = text
+        let cell = tableView.dequeueReusableCell(withIdentifier: "my", for: indexPath) as! ItemCell
+        cell.item = self.data[indexPath.row]
         
         return cell
     }
@@ -54,16 +43,10 @@ class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableVi
     
     override func viewDidLoad() {
         //tableView().register(UINib(nibName: "CustomTableViewCell", bundle: nil), forCellReuseIdentifier: "cellReuseIdentifier")
-        print("did load")
         super.viewDidLoad()
-        
         getItems()
         
-        for i in 0...5 {
-            data.append("\(i)")
-        }
         
-        self.tableView().reloadData()
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -73,6 +56,41 @@ class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableVi
     func getItems() {
         let url = "http://localhost:3000/items"
         
+        Alamofire.request(url)
+            .responseJSON {
+                response in
+                // check for errors
+                guard response.result.error == nil else {
+                    // got an error in getting the data, need to handle it
+                    print("error calling GET")
+                    print(response.result.error!)
+                    return
+                }
+                let json = JSON(response.result.value)
+                for (index,subJson):(String, JSON) in json {
+                    //fill in the data
+                    do {
+                        let imgData = try subJson["img"].rawData() as Data?
+                        if imgData != nil {
+                            let img = UIImage()
+                            self.data.append(Item(id: subJson["id"].intValue as Int, label: subJson["label"].stringValue, image: img))
+                        }
+                    } catch {
+                        print("conversion error")
+                    }
+                }
+                print(self.data)
+                self.tableView().reloadData()
+        }
+    }
+    @objc func didTapDownload(sender:UIButton) {
+        self.resignFirstResponder()
+        let id = sender.tag
+        print("Download")
+        
+       
+        
+        let url = "http://localhost:3000/items/\(id)"
         
         Alamofire.request(url)
             .responseJSON {
@@ -80,15 +98,23 @@ class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableVi
                 // check for errors
                 guard response.result.error == nil else {
                     // got an error in getting the data, need to handle it
-                    print("error calling GET on /todos/1")
+                    print("error calling GET")
                     print(response.result.error!)
                     return
                 }
                 let json = JSON(response.result.value)
-                
-                for (index,subJson):(String, JSON) in json {
-                    print(subJson["id"])
+                print(json)
+                do {
+                    let fileData = try json["file"].rawData() as Data?
+                    if fileData != nil {
+                        print("data!")
+                    }
+                } catch {
+                    print("conversion error")
                 }
+                print(self.data)
+                self.tableView().reloadData()
         }
+        //self.present(ARViewController(), animated: true, completion: nil)
     }
 }
