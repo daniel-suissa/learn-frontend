@@ -1,11 +1,13 @@
 import UIKit
+
+
 class ItemCell : UITableViewCell {
      var item : Item? {
         didSet {
-            itemImage.image = item?.image
+            //itemImage.image = item?.image
+            itemImage.image = UIImage()
             itemNameLabel.text = item?.label
-            itemDescriptionLabel.text = item?.owner
-            downloadButton.tag = (item?.id)!
+            downloadButton.accessibilityIdentifier = (item?.scnFile)!
         }
      }
     
