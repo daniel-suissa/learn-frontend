@@ -11,6 +11,7 @@ import SceneKit
 import ARKit
 
 class ARViewController: UIViewController, ARSCNViewDelegate {
+    
     lazy var sceneView: ARSCNView = {
         let sceneView = ARSCNView(frame: .zero)
 //        sceneView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -51,13 +52,51 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         textView.isHidden = true
         return textView
     }()
+    
+    lazy var marketplaceButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .white
+        button.layer.borderColor = UIColor.blue.cgColor
+        button.layer.borderWidth = 1
+        button.layer.masksToBounds = true
+        button.setTitle("M", for: .normal)
+        button.setTitleColor(.blue, for: .normal)
+        button.addTarget(self, action: #selector(self.didTapM), for: .touchUpInside)
+        
+    
+        return button
+    }()
+    
+    
     var labelingTouch = false;
     var lastTouchTime = Date()
+    var node: SCNNode = SCNNode()
+    var placeNodeTouch = false;
     
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init(node: SCNNode) {
+        super.init(nibName: nil, bundle: nil)
+        self.node = node
+        placeNodeTouch = true        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        //set arview
+        
         self.sceneView.delegate = self
+        
+        
+        
+        
         
         self.view.addSubview(self.sceneView)
         self.sceneView.translatesAutoresizingMaskIntoConstraints = false
@@ -71,6 +110,24 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v(>=30)]", options: [], metrics: nil, views: ["v": self.textView]))
         
         self.sceneView.scene = SCNScene()
+        
+        
+        //set button
+        
+        self.view.addSubview(self.marketplaceButton)
+         // will return the bottommost y coordinate of the view
+        
+        let xPostion:CGFloat = view.frame.maxX-80
+        let yPostion:CGFloat = view.frame.maxY-90
+        let buttonWidth:CGFloat = 60
+        let buttonHeight:CGFloat = 45
+        
+        self.marketplaceButton.frame = CGRect(x:xPostion, y:yPostion, width:buttonWidth, height:buttonHeight)
+        self.marketplaceButton.layer.cornerRadius = 20
+        self.marketplaceButton.backgroundColor = UIColor.white
+        self.marketplaceButton.tintColor = UIColor.black
+        self.marketplaceButton.clipsToBounds = true
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -104,7 +161,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         let hitTransform = SCNMatrix4(hitResult.worldTransform);
         let hitVector = SCNVector3Make(hitTransform.m41, hitTransform.m42, hitTransform.m43)
         
-        if labelingTouch {
+        if placeNodeTouch {
+            self.textView.isHidden = true
+            placeNode(position: hitVector, hitTransform: hitTransform)
+            placeNodeTouch.toggle()
+        } else if labelingTouch {
             self.textView.isHidden = false
             self.textView.becomeFirstResponder()
         } else {
@@ -113,6 +174,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
             self.textView.resignFirstResponder()
         }
         labelingTouch.toggle()
+    }
+    func placeNode(position: SCNVector3, hitTransform: SCNMatrix4) {
+        self.node.position = position
+        sceneView.scene.rootNode.addChildNode(self.node);
+        self.node.scale = SCNVector3(0.1, 0.1, 0.1)
+        print("placed node")
+        print(self.node.name!)
     }
     
     func createLabel(position: SCNVector3, hitTransform: SCNMatrix4) {
@@ -183,5 +251,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
     func getTranslation(original: String) {
         let apiKey = "AIzaSyAaEmb95x7v0hyaH1PKekzEUesaoBZF9lU"
         
+    }
+    
+    @objc func didTapM() {
+        self.resignFirstResponder()
+        print("Marketplace")
+        self.present(MarketplaceViewController(), animated: true, completion: nil)
     }
 }
