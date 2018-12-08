@@ -287,8 +287,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         return self.node
     }
     
-    func createLabel(position: SCNVector3) -> SCNNode? {
-        let text = self.text
+    func createLabel(position: SCNVector3, withText: String? = nil) -> SCNNode? {
+        let text = withText ?? self.text
         let labelShape = SCNText(string: text, extrusionDepth: 0.1)
         
         labelShape.font = .systemFont(ofSize: 0.1)
@@ -365,12 +365,26 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         self.present(MarketplaceViewController(), animated: true, completion: nil)
     }
     
+    
+    struct ImageRecResponse: Decodable {
+        let text: String
+    }
+    
     @objc func didTapCamera() {
         self.resignFirstResponder()
         print("Camera")
+        guard let center = self.sceneView.realWorldPosition(for: self.sceneView.center) else { return }
         let snapshot = self.sceneView.snapshot()
-//        URLSession.shared.send(url: <#T##URL#>, completionHandler: <#T##((Data?, URLResponse?, Error?) -> Void)?##((Data?, URLResponse?, Error?) -> Void)?##(Data?, URLResponse?, Error?) -> Void#>)
-//        self.present(ImageVC(image: snapshot), animated: true, completion: nil)
+        var request = URLRequest(url: URL.baseUrl.appendingPathComponent("/vision"))
+        request.httpMethod = "POST"
+        request.setValue("image/jpeg", forHTTPHeaderField: "Content-Type")
+        URLSession.shared.upload(&request, data: snapshot.jpegData(compressionQuality: 0.75)) { (data, _, error) in
+            guard error == nil, let data = data, let res = try? JSONDecoder().decode(ImageRecResponse.self, from: data) else {
+                self.present(UIAlertController(error: error), animated: true, completion: nil)
+                return
+            }
+            self.sceneView.scene.rootNode.addChildNode(self.createLabel(position: center, withText: res.text))
+        }
     }
     
     @objc func didTapR() {

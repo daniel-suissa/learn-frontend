@@ -32,4 +32,20 @@ extension URLSession {
             }
         }.resume()
     }
+    
+    func upload(url: URL, data: Data?, completionHandler: ((Data?, URLResponse?, Error?) -> Void)?) {
+        var request = URLRequest(url: url)
+        self.upload(&request, data: data, completionHandler: completionHandler)
+    }
+    
+    func upload(_ request: inout URLRequest, data: Data?, completionHandler: ((Data?, URLResponse?, Error?) -> Void)?) {
+        if let user = Credentials.main.user, let authString = "\(user.email):\(user.passwordHash)".data(using: .utf8)?.base64EncodedString() {
+            request.setValue("Basic \(authString)", forHTTPHeaderField: "Authorization")
+        }
+        self.uploadTask(with: request, from: data) { (data, response, error) in
+            DispatchQueue.main.async {
+                completionHandler?(data, response, error)
+            }
+        }.resume()
+    }
 }

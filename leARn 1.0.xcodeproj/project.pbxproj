@@ -23,6 +23,7 @@
 		50185FEF21B46A1300C88539 /* URL+utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50185FEE21B46A1300C88539 /* URL+utils.swift */; };
 		50185FF321B479FE00C88539 /* Codable+utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50185FF221B479FE00C88539 /* Codable+utils.swift */; };
 		5021A83D21BC36C500177CC7 /* UIAlertController+error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5021A83C21BC36C500177CC7 /* UIAlertController+error.swift */; };
+		5021A83F21BC5A1600177CC7 /* ARSCNView+utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5021A83E21BC5A1600177CC7 /* ARSCNView+utils.swift */; };
 		505D9CFE21A4643E0099009A /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9CFD21A4643E0099009A /* RegisterViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 		50185FEE21B46A1300C88539 /* URL+utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+utils.swift"; sourceTree = "<group>"; };
 		50185FF221B479FE00C88539 /* Codable+utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+utils.swift"; sourceTree = "<group>"; };
 		5021A83C21BC36C500177CC7 /* UIAlertController+error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+error.swift"; sourceTree = "<group>"; };
+		5021A83E21BC5A1600177CC7 /* ARSCNView+utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARSCNView+utils.swift"; sourceTree = "<group>"; };
 		505D9CFD21A4643E0099009A /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -154,6 +156,7 @@
 				50185FEE21B46A1300C88539 /* URL+utils.swift */,
 				50185FF221B479FE00C88539 /* Codable+utils.swift */,
 				5021A83C21BC36C500177CC7 /* UIAlertController+error.swift */,
+				5021A83E21BC5A1600177CC7 /* ARSCNView+utils.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 			files = (
 				4323E52D21A9C9390072D758 /* CustomTableViewCell.swift in Sources */,
 				500910942198BF02002BF5A2 /* LoginViewController.swift in Sources */,
+				5021A83F21BC5A1600177CC7 /* ARSCNView+utils.swift in Sources */,
 				50185FEF21B46A1300C88539 /* URL+utils.swift in Sources */,
 				50185FED21B467D900C88539 /* URLSession+utils.swift in Sources */,
 				50185FEB21B467C200C88539 /* Data+Utils.swift in Sources */,
