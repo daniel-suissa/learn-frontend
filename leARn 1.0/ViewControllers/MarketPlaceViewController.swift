@@ -18,6 +18,7 @@ var port = ":3000"
 class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableViewDataSource, URLSessionDownloadDelegate {
     
     private var node: SCNNode = SCNNode()
+    private var nodeName: String = ""
     private var data: [Item] = []
     lazy var tableView = { () -> UITableView in
         let tableView = UITableView(frame: self.view.bounds, style: UITableViewStyle.plain)
@@ -121,6 +122,7 @@ class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableVi
     @objc func didTapDownload(sender:UIButton) {
         self.resignFirstResponder()
         let scnFile = sender.accessibilityIdentifier!
+        self.nodeName = scnFile
         print("Download")
         
        
