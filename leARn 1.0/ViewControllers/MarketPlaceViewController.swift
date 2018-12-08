@@ -9,8 +9,6 @@
 import Foundation
 import UIKit
 import ARKit
-//import Alamofire
-//import SwiftyJSON
 
 class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableViewDataSource, URLSessionDownloadDelegate {
     

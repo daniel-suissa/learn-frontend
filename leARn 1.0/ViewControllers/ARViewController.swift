@@ -29,6 +29,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
             fatalError("Error getting world map URL from document directory.")
         }
     }()
+    
     lazy var textView: UITextView = {
         let textView = UITextView(frame: .zero);
         textView.textAlignment = .justified
@@ -73,8 +74,18 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         button.setTitle("M", for: .normal)
         button.setTitleColor(.blue, for: .normal)
         button.addTarget(self, action: #selector(self.didTapM), for: .touchUpInside)
-        
     
+        return button
+    }()
+    
+    lazy var cameraButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .white
+        button.layer.borderColor = UIColor.blue.cgColor
+        button.layer.borderWidth = 1
+        button.layer.masksToBounds = true
+        button.setImage(UIImage(named: "camera")!, for: .normal)
+        button.addTarget(self, action: #selector(self.didTapCamera), for: .touchUpInside)
         return button
     }()
     
@@ -117,10 +128,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         //set arview
         
         self.sceneView.delegate = self
-        
-        
-        
-        
         
         self.view.addSubview(self.sceneView)
         self.sceneView.translatesAutoresizingMaskIntoConstraints = false
@@ -167,6 +174,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         self.resetButton.backgroundColor = UIColor.white
         self.resetButton.tintColor = UIColor.black
         self.resetButton.clipsToBounds = true
+        
+        self.view.addSubview(self.cameraButton)
+        self.cameraButton.translatesAutoresizingMaskIntoConstraints = false;
+        self.cameraButton.layer.cornerRadius = 20
+        self.cameraButton.clipsToBounds = true
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[top]-[v(45)]", options: [], metrics: nil, views: ["top": self.topLayoutGuide, "v": self.cameraButton]))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "[v(45)]-|", options: [], metrics: nil, views: ["v": self.cameraButton]))
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -350,6 +365,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         self.present(MarketplaceViewController(), animated: true, completion: nil)
     }
     
+    @objc func didTapCamera() {
+        self.resignFirstResponder()
+        print("Camera")
+        let snapshot = self.sceneView.snapshot()
+//        URLSession.shared.send(url: <#T##URL#>, completionHandler: <#T##((Data?, URLResponse?, Error?) -> Void)?##((Data?, URLResponse?, Error?) -> Void)?##(Data?, URLResponse?, Error?) -> Void#>)
+//        self.present(ImageVC(image: snapshot), animated: true, completion: nil)
+    }
     
     @objc func didTapR() {
         self.resignFirstResponder()
