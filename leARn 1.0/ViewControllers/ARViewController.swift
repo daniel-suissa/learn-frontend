@@ -182,6 +182,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[top]-[v(45)]", options: [], metrics: nil, views: ["top": self.topLayoutGuide, "v": self.cameraButton]))
         self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "[v(45)]-|", options: [], metrics: nil, views: ["v": self.cameraButton]))
         
+        self.sceneView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapView)))
+        
+    }
+    
+    @objc func didTapView() {
+        
+        self.textView.isHidden = false
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -379,11 +386,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         request.httpMethod = "POST"
         request.setValue("image/jpeg", forHTTPHeaderField: "Content-Type")
         URLSession.shared.upload(&request, data: snapshot.jpegData(compressionQuality: 0.75)) { (data, _, error) in
-            guard error == nil, let data = data, let res = try? JSONDecoder().decode(ImageRecResponse.self, from: data) else {
+            guard error == nil,
+                let data = data,
+                let res = try? JSONDecoder().decode(ImageRecResponse.self, from: data),
+                let label = self.createLabel(position: center, withText: res.text)
+            else {
                 self.present(UIAlertController(error: error), animated: true, completion: nil)
                 return
             }
-            self.sceneView.scene.rootNode.addChildNode(self.createLabel(position: center, withText: res.text))
+            self.sceneView.scene.rootNode.addChildNode(label)
         }
     }
     
