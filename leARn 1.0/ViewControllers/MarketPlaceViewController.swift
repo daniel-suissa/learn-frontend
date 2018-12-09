@@ -59,8 +59,7 @@ class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableVi
     
     
     func getItems() {
-        
-        let url = URL.baseUrl.appendingPathComponent("/items")
+        let url = URL.API.items
         print(url)
         URLSession.shared.send(url: url) { [weak self] (data, response, error) in
             guard error == nil, let data = data, let itemArr = try? JSONDecoder().decode([Item].self, from: data) else {
@@ -87,7 +86,7 @@ class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableVi
         self.nodeName = scnFile
         print("Download")
         
-        let url = URL.baseUrl.appendingPathComponent("/\(scnFile)")
+        let url = URL.Base.url.appendingPathComponent("/\(scnFile)")
         downloadSceneTask(url: url)
         print("didn't die so...")
     }
