@@ -14,7 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        let rootViewController = ARViewController()//(nibName: nil, bundle: nil)
+        //let rootViewController = ARViewController()//(nibName: nil, bundle: nil)
+        let rootViewController = LoginViewController(   )
         self.window?.rootViewController = rootViewController
         self.window?.makeKeyAndVisible()
         return true
