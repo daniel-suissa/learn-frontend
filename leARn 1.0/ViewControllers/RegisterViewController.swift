@@ -193,7 +193,14 @@ class RegisterViewController: UIViewController {
     @objc func didTapRegister() {
         self.resignFirstResponder()
         guard self.validate() else { return }
-        self.present(ARViewController(), animated: true, completion: nil)
+        print("register")
+        Credentials.main.register(email: self.emailField.text!, password: self.passwordField.text!, language: self.selectedLanguage!.key, displayName: self.nameField.text!) { error, user in
+            guard error == nil, user != nil else {
+                self.present(UIAlertController(error: error), animated: true, completion: nil)
+                return
+            }
+            self.present(ARViewController(), animated: true, completion: nil)
+        }
     }
     
     func validate() -> Bool {

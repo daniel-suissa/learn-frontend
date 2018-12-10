@@ -89,7 +89,15 @@ class LoginViewController: UIViewController {
     @objc func didTapLogin() {
         self.resignFirstResponder()
         print("Login")
-        self.present(ARViewController(), animated: true, completion: nil)
+        guard let email = self.emailField.text, let password = self.passwordField.text else { return }
+        Credentials.main.login(email: email, password: password) { error, user in
+            guard error == nil, user != nil else {
+                self.present(UIAlertController(error: error), animated: true, completion: nil)
+                return;
+            }
+            self.present(ARViewController(), animated: true, completion: nil)
+        }
+        
     }
     
     @objc func didTapRegister() {

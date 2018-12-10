@@ -9,11 +9,6 @@
 import Foundation
 import UIKit
 import ARKit
-//import Alamofire
-//import SwiftyJSON
-
-var localhost = "http://192.168.1.3"
-var port = ":3000"
 
 class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableViewDataSource, URLSessionDownloadDelegate {
     
@@ -21,7 +16,7 @@ class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableVi
     private var nodeName: String = ""
     private var data: [Item] = []
     lazy var tableView = { () -> UITableView in
-        let tableView = UITableView(frame: self.view.bounds, style: UITableViewStyle.plain)
+        let tableView = UITableView(frame: self.view.bounds, style: .plain)
         tableView.backgroundColor = UIColor.white
         tableView.delegate = self
         tableView.dataSource = self
@@ -64,114 +59,36 @@ class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableVi
     
     
     func getItems() {
-        
-        let url = URL(string: "\(localhost)\(port)/items/")!
+        let url = URL.API.items
         print(url)
-        
-        let task = URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
-            guard let data = data else { return }
+        URLSession.shared.send(url: url) { [weak self] (data, response, error) in
+            guard error == nil, let data = data, let itemArr = try? JSONDecoder().decode([Item].self, from: data) else {
+                self?.present(UIAlertController(error: error) {
+                    self?.dismiss(animated: true, completion: nil)
+                }, animated: true, completion: nil)
+                return
+            }
             print(data)
-            let itemArr = try? JSONDecoder().decode([Item].self, from: data)
-            for  item: Item in itemArr! {
+            for item in itemArr {
                 //fill in the data
                 self?.data.append(item)
-                //let imgData = try item["img"].rawData() as Data?
-                /*if imgData != nil {
-                    let img = UIImage()
-                    self.data.append(Item(id: subJson["id"].intValue as Int, label: subJson["label"].stringValue, image: img))
-                }*/
             }
             DispatchQueue.main.async {
                 self?.tableView().reloadData()
             }
             
         }
-        
-        
-        task.resume()
-        
-        /*
-        let url = "http://localhost:3000/items"
-        Alamofire.request(url)
-            .responseJSON {
-                response in
-                // check for errors
-                guard response.result.error == nil else {
-                    // got an error in getting the data, need to handle it
-                    print("error calling GET")
-                    print(response.result.error!)
-                    return
-                }
-                let json = JSON(response.result.value)
-                for (index,subJson):(String, JSON) in json {
-                    //fill in the data
-                    do {
-                        let imgData = try subJson["img"].rawData() as Data?
-                        if imgData != nil {
-                            let img = UIImage()
-                            self.data.append(Item(id: subJson["id"].intValue as Int, label: subJson["label"].stringValue, image: img))
-                        }
-                    } catch {
-                        print("conversion error")
-                    }
-                }
-                print(self.data)
-                self.tableView().reloadData()
-        }*/
     }
+    
     @objc func didTapDownload(sender:UIButton) {
         self.resignFirstResponder()
         let scnFile = sender.accessibilityIdentifier!
         self.nodeName = scnFile
         print("Download")
         
-       
-        let urlStr = "\(localhost)\(port)/\(scnFile)";
-        print(urlStr)
-        let url = URL(string: urlStr)!
+        let url = URL.Base.url.appendingPathComponent("/\(scnFile)")
         downloadSceneTask(url: url)
         print("didn't die so...")
-        //let scene = try! SCNScene(url: url as URL, options:nil)
-        //self.present(ARViewController(scene: scene), animated: true, completion: nil)
-        /*
-        let task = URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
-            guard let data = data else { return }
-            let scnSource = SCNSceneSource(data: data)
-            DispatchQueue.main.async {
-                self?.present(ARViewController(sceneSource: scnSource!), animated: true, completion: nil)
-            }
-            
-        }
-        
-        task.resume()*/
-        
-        /*
-        let url = "http://localhost:3000/items/\(id)"
-        Alamofire.request(url)
-            .responseJSON {
-                response in
-                // check for errors
-                guard response.result.error == nil else {
-                    // got an error in getting the data, need to handle it
-                    print("error calling GET")
-                    print(response.result.error!)
-                    return
-                }
-                let json = JSON(response.result.value)
-                print(json)
-                do {
-                    let fileData = try json["file"].rawData() as Data?
-                    if fileData != nil {
-                        print("data!")
-                    }
-                } catch {
-                    print("conversion error")
-                }
-                print(self.data)
-                self.tableView().reloadData()
-        }
- */
-        //self.present(ARViewController(), animated: true, completion: nil)
     }
     
     /// Downloads An SCNFile From A Remote URL
