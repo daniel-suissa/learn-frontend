@@ -153,13 +153,18 @@ class ARViewController: UIViewController {
             print("creating config..")
             guard let worldMap = ARWorldMap.unarchive() else { print ("can't load map"); return }
             self.resetTrackingConfiguration(with: worldMap)
-            
         }
     }
     
     func createLabel(position: SCNVector3, withText: String? = nil) -> SCNNode? {
         let text = withText ?? self.text
-        let labelShape = SCNText(string: text, extrusionDepth: 0.1)
+        let labelShape = SCNText(string: "translating...", extrusionDepth: 0.1)
+        
+        // Substitute in the translated text when translation completes
+        TranslationRequest.translate(text: text) { translated in
+            guard let translated = translated else { return }
+            labelShape.string = translated
+        }
         
         labelShape.font = .systemFont(ofSize: 0.4)
         labelShape.firstMaterial!.diffuse.contents = UIColor.black
@@ -213,7 +218,7 @@ class ARViewController: UIViewController {
         URLSession.shared.upload(&request, data: snapshot.jpegData(compressionQuality: 0.75)) { (data, _, error) in
             guard error == nil,
                 let data = data,
-                let res = try? JSONDecoder().decode(ImageRecResponse.self, from: data),
+                let res = try? JSONDecoder().decode(TextResponse.self, from: data),
                 let label = self.createLabel(position: center, withText: res.text)
             else {
                 self.present(UIAlertController(error: error), animated: true, completion: nil)

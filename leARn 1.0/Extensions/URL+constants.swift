@@ -10,7 +10,7 @@ import Foundation
 
 extension URL {
     class Base {
-        static var hostString = "http://10.64.22.105"
+        static var hostString = "http://10.16.3.201"
         static var portNum = 3000
         static var url = URL(string: "\(hostString):\(portNum)")!
     }
@@ -19,6 +19,7 @@ extension URL {
         static var register = URL(string: "users/register", relativeTo: Base.url)!
         static var vision = Base.url.appendingPathComponent("/vision")
         static var items = Base.url.appendingPathComponent("/items")
+        static var translate = Base.url.appendingPathComponent("/translate")
     }
     class Local {
         static var baseUrl = (try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true))!

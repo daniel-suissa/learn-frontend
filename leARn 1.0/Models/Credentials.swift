@@ -43,7 +43,7 @@ class Credentials {
     func login(email: String, password: String, completionHandler: ((Error?, User?) -> Void)?) {
         let passwordHash = Credentials.passwordHash(from: password)
         let auth = LoginRequest(email: email, passwordHash: passwordHash)
-        var request = URLRequest(url: URL.API.register)
+        var request = URLRequest(url: URL.API.login)
         request.httpMethod = "POST"
         URLSession.shared.send(&request, user: auth) { (data, response, error) in
             guard error == nil, let data = data, let user = try? JSONDecoder().decode(User.self, from: data) else {

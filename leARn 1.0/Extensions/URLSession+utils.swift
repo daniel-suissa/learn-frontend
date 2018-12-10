@@ -19,11 +19,11 @@ extension URLSession {
     }
     
     func send(_ request: inout URLRequest, completionHandler: ((Data?, URLResponse?, Error?) -> Void)?) {
-        self.send(&request, user: Credentials.main.user, completionHandler: completionHandler)
+        self.send(&request, user: nil, completionHandler: completionHandler)
     }
     
     func send(_ request: inout URLRequest, user: Loginable?, completionHandler: ((Data?, URLResponse?, Error?) -> Void)?) {
-        if let user = user, let authString = "\(user.email):\(user.passwordHash)".data(using: .utf8)?.base64EncodedString() {
+        if let user = user ?? Credentials.main.user, let authString = "\(user.email):\(user.passwordHash)".data(using: .utf8)?.base64EncodedString() {
             request.setValue("Basic \(authString)", forHTTPHeaderField: "Authorization")
         }
         self.dataTask(with: request) { (data, response, error) in
