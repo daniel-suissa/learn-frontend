@@ -12,6 +12,7 @@ import ARKit
 
 class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableViewDataSource, URLSessionDownloadDelegate {
     
+    private var arView: ARViewController
     private var node: SCNNode = SCNNode()
     private var nodeName: String = ""
     private var data: [Item] = []
@@ -25,6 +26,14 @@ class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableVi
         return tableView
     }
     
+    init(arView: ARViewController) {
+        self.arView = arView
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.data.count
@@ -158,14 +167,14 @@ class MarketplaceViewController: UIViewController,UITableViewDelegate ,UITableVi
                 modelHolderNode.addChildNode(childNode as SCNNode)
             }
             
-            print("COUNT:")
             print(nodeArray.count)
             nodeArray[0].scale = SCNVector3(x: Float(12), y: Float(12), z: Float(12))
             print(nodeArray[0].scale)
             self.node = nodeArray[0]
-            print("ARRRRRR")
             DispatchQueue.main.async {
-                self.present(ARViewController(node: (self.node)), animated: true, completion: nil)
+                //self.present(self.ar), animated: true, completion: nil)
+                self.arView.setNode(node: nodeArray[0])
+                self.dismiss(animated: true, completion: nil)
                 print("Please happen last")
             }
         } catch  {

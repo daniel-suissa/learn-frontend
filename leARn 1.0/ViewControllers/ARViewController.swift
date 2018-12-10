@@ -119,7 +119,7 @@ class ARViewController: UIViewController {
         //set R button
         self.view.addVFLConstraints(["|-\(40)-[button(\(buttonSize.width))]", "V:[button(\(buttonSize.height))]-\(90)-|"], views: ["button": self.resetButton])
         
-        self.view.addVFLConstraints(["[button(\(buttonSize.height))]-|", "V:[v(\(buttonSize.height))]"], views: ["button": self.cameraButton])
+        self.view.addVFLConstraints(["[button(\(buttonSize.height))]-|", "V:[button(\(buttonSize.height))]"], views: ["button": self.cameraButton])
         self.cameraButton.pinToTop(of: self.view)
     }
     
@@ -161,7 +161,7 @@ class ARViewController: UIViewController {
         let text = withText ?? self.text
         let labelShape = SCNText(string: text, extrusionDepth: 0.1)
         
-        labelShape.font = .systemFont(ofSize: 0.1)
+        labelShape.font = .systemFont(ofSize: 0.4)
         labelShape.firstMaterial!.diffuse.contents = UIColor.black
         let labelNode = SCNNode(geometry: labelShape);
         let fontSize = Float(0.1)
@@ -195,15 +195,11 @@ class ARViewController: UIViewController {
         return labelNode
     }
     
-    func getTranslation(original: String) {
-        let apiKey = "AIzaSyAaEmb95x7v0hyaH1PKekzEUesaoBZF9lU"
-    }
-    
     // MARK: - Button Actions
     @objc func didTapM() {
         self.resignFirstResponder()
         print("Marketplace")
-        self.present(MarketplaceViewController(), animated: true, completion: nil)
+        self.present(MarketplaceViewController(arView: self), animated: true, completion: nil)
     }
     
     @objc func didTapCamera() {
@@ -251,6 +247,10 @@ class ARViewController: UIViewController {
             }
         }
     }
+    func setNode(node: SCNNode) {
+        self.temporaryNode = node
+        self.placeNodeTouch = true
+    }
     
     func resetTrackingConfiguration(with worldMap: ARWorldMap? = nil) {
         let configuration = ARWorldTrackingConfiguration()
@@ -265,6 +265,14 @@ class ARViewController: UIViewController {
         print("running new session")
         sceneView.debugOptions = [.showFeaturePoints]
         sceneView.session.run(configuration, options: options)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+            if worldMap != nil {
+                for anchor in worldMap!.anchors {
+                    self.sceneView.session.add(anchor: anchor)
+                    print(anchor.name)
+                }
+            }
+        })
         
         
     }
