@@ -139,7 +139,6 @@ class ARViewController: UIViewController {
         //sceneView.scene.rootNode.addChildNode(self.node);
         self.temporaryNode.scale = SCNVector3(0.1, 0.1, 0.1)
         print("placed node")
-        print(self.temporaryNode.name!)
         return self.temporaryNode
     }
     
