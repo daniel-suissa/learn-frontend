@@ -114,13 +114,13 @@ class ARViewController: UIViewController {
         let buttonSize = CGSize(width: 60, height: 45)
         
         //set M button
-        self.view.addVFLConstraints(["[button(\(buttonSize.width))]-\(40)-|", "V:[button(\(buttonSize.height))]-\(90)-|"], views: ["button": self.marketplaceButton])
+        self.view.addVFLConstraints(["[button(\(buttonSize.width))]-\(40)-|", "V:[button(\(buttonSize.height))]-\(40)-|"], views: ["button": self.marketplaceButton])
 
         //set R button
-        self.view.addVFLConstraints(["|-\(40)-[button(\(buttonSize.width))]", "V:[button(\(buttonSize.height))]-\(90)-|"], views: ["button": self.resetButton])
+        self.view.addVFLConstraints(["|-\(40)-[button(\(buttonSize.width))]", "V:[button(\(buttonSize.height))]-\(40)-|"], views: ["button": self.resetButton])
         
         self.view.addVFLConstraints(["[button(\(buttonSize.height))]-|", "V:[button(\(buttonSize.height))]"], views: ["button": self.cameraButton])
-        self.cameraButton.pinToTop(of: self.view)
+        self.cameraButton.pinToTop(of: self.view, safeArea: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -160,12 +160,6 @@ class ARViewController: UIViewController {
         let text = withText ?? self.text
         let labelShape = SCNText(string: "translating...", extrusionDepth: 0.1)
         
-        // Substitute in the translated text when translation completes
-        TranslationRequest.translate(text: text) { translated in
-            guard let translated = translated else { return }
-            labelShape.string = translated
-        }
-        
         labelShape.font = .systemFont(ofSize: 0.4)
         labelShape.firstMaterial!.diffuse.contents = UIColor.black
         let labelNode = SCNNode(geometry: labelShape);
@@ -195,6 +189,19 @@ class ARViewController: UIViewController {
         labelNode.constraints = [billboardConstraint]
         boxNode.constraints = [billboardConstraint]
         
+        // Substitute in the translated text when translation completes
+        TranslationRequest.translate(text: text) { translated in
+            guard let translated = translated else { return }
+            labelShape.string = translated
+            let labelNode = SCNNode(geometry: labelShape);
+            let (minVec, maxVec) = labelNode.boundingBox
+            let w = CGFloat(maxVec.x - minVec.x)
+            let h = CGFloat(maxVec.y - minVec.y)
+            let d = CGFloat(maxVec.z - minVec.z)
+            geoBox.width = w
+            geoBox.height = h
+            geoBox.length = d
+        }
         
         print("creating label at \(labelNode.position)...")
         return labelNode
@@ -210,7 +217,7 @@ class ARViewController: UIViewController {
     @objc func didTapCamera() {
         self.resignFirstResponder()
         print("Camera")
-        guard let center = self.sceneView.realWorldPosition(for: self.sceneView.center) else { return }
+        guard let transform = self.sceneView.hitTransform(for: self.sceneView.center), let center = self.sceneView.realWorldPosition(for: self.sceneView.center) else { return }
         let snapshot = self.sceneView.snapshot()
         var request = URLRequest(url: URL.API.vision)
         request.httpMethod = "POST"
@@ -224,7 +231,8 @@ class ARViewController: UIViewController {
                 self.present(UIAlertController(error: error), animated: true, completion: nil)
                 return
             }
-            self.sceneView.scene.rootNode.addChildNode(label)
+            let anchor = ARAnchor(name: "label;\(self.text)", transform: transform)
+            self.sceneView.session.add(anchor: anchor)
         }
     }
     

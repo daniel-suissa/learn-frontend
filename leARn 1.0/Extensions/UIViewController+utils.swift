@@ -34,7 +34,8 @@ extension UIView {
         
     }
     
-    func pinToTop(of view: UIView) {
-        view.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+    func pinToTop(of view: UIView, safeArea: Bool = false) {
+        let anchor = safeArea ? view.safeAreaLayoutGuide.topAnchor : view.topAnchor
+        self.topAnchor.constraint(equalTo: anchor).isActive = true
     }
 }
