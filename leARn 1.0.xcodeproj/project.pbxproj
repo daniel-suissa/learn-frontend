@@ -29,6 +29,7 @@
 		5021A84521BDDCAC00177CC7 /* ARViewController+SCNDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5021A84421BDDCAC00177CC7 /* ARViewController+SCNDelegate.swift */; };
 		5021A84721BDDF2B00177CC7 /* ImageRecResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5021A84621BDDF2B00177CC7 /* ImageRecResponse.swift */; };
 		5021A84921BDDFBD00177CC7 /* ARWorldMap+utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5021A84821BDDFBD00177CC7 /* ARWorldMap+utils.swift */; };
+		5021A84B21BDE2C700177CC7 /* TranslationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5021A84A21BDE2C700177CC7 /* TranslationRequest.swift */; };
 		505D9CFE21A4643E0099009A /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9CFD21A4643E0099009A /* RegisterViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +62,7 @@
 		5021A84421BDDCAC00177CC7 /* ARViewController+SCNDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARViewController+SCNDelegate.swift"; sourceTree = "<group>"; };
 		5021A84621BDDF2B00177CC7 /* ImageRecResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRecResponse.swift; sourceTree = "<group>"; };
 		5021A84821BDDFBD00177CC7 /* ARWorldMap+utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARWorldMap+utils.swift"; sourceTree = "<group>"; };
+		5021A84A21BDE2C700177CC7 /* TranslationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationRequest.swift; sourceTree = "<group>"; };
 		505D9CFD21A4643E0099009A /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -154,6 +156,7 @@
 			children = (
 				50185FE721B4644200C88539 /* Credentials.swift */,
 				5021A84621BDDF2B00177CC7 /* ImageRecResponse.swift */,
+				5021A84A21BDE2C700177CC7 /* TranslationRequest.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 				5021A84321BDD1D400177CC7 /* UIViewController+utils.swift in Sources */,
 				5021A83F21BC5A1600177CC7 /* ARSCNView+utils.swift in Sources */,
 				50185FEF21B46A1300C88539 /* URL+constants.swift in Sources */,
+				5021A84B21BDE2C700177CC7 /* TranslationRequest.swift in Sources */,
 				50185FED21B467D900C88539 /* URLSession+utils.swift in Sources */,
 				50185FEB21B467C200C88539 /* Data+Utils.swift in Sources */,
 				5021A83D21BC36C500177CC7 /* UIAlertController+error.swift in Sources */,

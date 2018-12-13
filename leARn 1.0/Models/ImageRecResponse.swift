@@ -8,6 +8,6 @@
 
 import Foundation
 
-struct ImageRecResponse: Decodable {
+struct TextResponse: Decodable {
     let text: String
 }

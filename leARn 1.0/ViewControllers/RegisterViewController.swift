@@ -23,9 +23,9 @@ enum Language: Int, CaseIterable {
     
     var key: String {
         switch self {
-        case .spanish: return "sp"
+        case .spanish: return "es"
         case .french: return "fr"
-        case .latin: return "lt"
+        case .latin: return "la"
         }
     }
 }
