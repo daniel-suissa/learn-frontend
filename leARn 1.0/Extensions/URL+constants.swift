@@ -10,7 +10,7 @@ import Foundation
 
 extension URL {
     class Base {
-        static var hostString = "http://10.64.22.105"
+        static var hostString = "http://10.16.126.114"
         static var portNum = 3000
         static var url = URL(string: "\(hostString):\(portNum)")!
     }
